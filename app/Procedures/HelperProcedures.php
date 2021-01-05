@@ -96,7 +96,7 @@ class HelperProcedures
 
         $dadodos_enviados = json_decode($p_dados_enviados);
         $dados_recebidos =  json_decode($p_dados_recebidos);
-
+        dd($dados_recebidos->calendario->expiracao);
         $data_expiracao =  gmdate("H", $dados_recebidos->calendario->expiracao);
         $hora_hoje = date("H:i:s");
         $expiracao = date('d/m/y H:i:s', strtotime("+$data_expiracao hour", strtotime($hora_hoje)));
