@@ -78,8 +78,9 @@ class HelperBradescoController extends Controller
                 CURLOPT_SSLKEY         => $certificateSslKey,
                 CURLOPT_POSTFIELDS => $dadosCobranca,
                 CURLOPT_HTTPHEADER => $headers
+                
             ));
-           
+           dd(curl_exec($curl));
             $response = curl_exec($curl);
             self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
