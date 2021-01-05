@@ -99,7 +99,7 @@ class HelperBradescoController extends Controller
 
         $access_token = json_decode($token);
 
-      
+
         //HEADERS
         $headers = [
             'Cache-Control: no-cache',
@@ -122,7 +122,7 @@ class HelperBradescoController extends Controller
             CURLOPT_SSLKEY         => $certificateSslKey,
             CURLOPT_HTTPHEADER => $headers
         ));
-
+        dd(curl_exec($curl));
         $response = curl_exec($curl);
         return $response;
         curl_close($curl);
