@@ -80,8 +80,9 @@ class HelperBradescoController extends Controller
                 CURLOPT_HTTPHEADER => $headers
                 
             ));
-           dd(curl_exec($curl));
+         
             $response = curl_exec($curl);
+            dd(curl_exec($curl));
             self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
