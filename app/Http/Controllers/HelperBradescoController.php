@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class HelperBradescoController extends Controller
 {
- 
+
     public static function getAccessToken()
     {
 
@@ -81,7 +81,7 @@ class HelperBradescoController extends Controller
             ));
 
             $response = curl_exec($curl);
-
+            dd($response);
             self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
