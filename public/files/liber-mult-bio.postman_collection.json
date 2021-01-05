@@ -1,0 +1,50 @@
+{
+	"info": {
+		"_postman_id": "3a303f79-e08b-4bbc-ba28-70629c6e4930",
+		"name": "liber-mult-bio",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://192.168.99.24:21024/facesvalidationservice?wsdl",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.empresa1.com.br/\">\r\n   <soapenv:Header/>\r\n   <soapenv:Body>\r\n      <ws:getImageStatusWithStream>\r\n         <!--Optional:-->\r\n         <arg0>cid:1608927707526</arg0>\r\n         <!--Optional:-->\r\n         <arg1>?</arg1>\r\n      </ws:getImageStatusWithStream>\r\n   </soapenv:Body>\r\n</soapenv:Envelope>",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://192.168.99.24:21024/facesvalidationservice?wsdl",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"99",
+						"24"
+					],
+					"port": "21024",
+					"path": [
+						"facesvalidationservice"
+					],
+					"query": [
+						{
+							"key": "wsdl",
+							"value": null
+						}
+					]
+				},
+				"description": "SindOnibus"
+			},
+			"response": []
+		}
+	]
+}
