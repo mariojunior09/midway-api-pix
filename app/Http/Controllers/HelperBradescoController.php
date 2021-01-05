@@ -99,12 +99,12 @@ class HelperBradescoController extends Controller
 
         $access_token = json_decode($token);
 
-
+        $t = $access_token->access_token;
         //HEADERS
         $headers = [
             'Cache-Control: no-cache',
             'Content-type: application/json',
-            'Authorization: Bearer ' . $access_token->access_token
+            'Authorization: Bearer ' . $t
         ];
 
         //CONFIGURAÇÃO DO CURL
