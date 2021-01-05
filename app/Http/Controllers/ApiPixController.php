@@ -33,7 +33,7 @@ class ApiPixController extends Controller
         );
 
         $token = self::verifyToken($array['chave']);
-        dd($token);
+       
         $cobranca = stripslashes(HelperBradescoController::createCobBradesco(json_encode($array), $token));
         $dados = json_decode($cobranca);
 
