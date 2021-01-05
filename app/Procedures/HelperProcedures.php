@@ -107,7 +107,7 @@ class HelperProcedures
         $p_devedor_cpf_cnpj =       $dados_recebidos->devedor->cpf;
         $p_valor            =       $dados_recebidos->valor->original;
         $p_solicitacao_pag  =        $dadodos_enviados->solicitacaoPagador;
-        $p_info_adicional   =       'dados que vem do app';
+        $p_info_adicional   =       'dados app';
         $p_location         =        $dados_recebidos->location;
         $p_chave_pix        =       $dados_recebidos->chave;
 
