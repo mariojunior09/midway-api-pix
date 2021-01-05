@@ -130,19 +130,19 @@ class HelperProcedures
             :p_id_retorno,
             :p_msg_retorn); end;");
 
-        $stmt->bindParam(':p_id_cobranca', $p_id_cobranca, \PDO::PARAM_STR, 40);
-        $stmt->bindParam(':p_data_criacao', $p_data_criacao, \PDO::PARAM_STR, 30);
-        $stmt->bindParam(':p_data_expiracao', $p_data_expiracao, \PDO::PARAM_STR, 50);
+        $stmt->bindParam(':p_id_cobranca', $p_id_cobranca, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_data_criacao', $p_data_criacao, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_data_expiracao', $p_data_expiracao, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_devedor_nome', $p_devedor_nome, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_devedor_cpf_cnpj', $p_devedor_cpf_cnpj, \PDO::PARAM_STR, 15);
+        $stmt->bindParam(':p_devedor_cpf_cnpj', $p_devedor_cpf_cnpj, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_valor', $p_valor, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_solicitacao_pag', $p_solicitacao_pag, \PDO::PARAM_STR, 200);
-        $stmt->bindParam(':p_info_adicional', $p_info_adicional, \PDO::PARAM_STR, 300);
+        $stmt->bindParam(':p_solicitacao_pag', $p_solicitacao_pag, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_info_adicional', $p_info_adicional, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_location', $p_location, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_chave_pix', $p_chave_pix, \PDO::PARAM_STR, 500);
 
-        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 10);
-        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 10);
+        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->execute();
 
         return $p_msg_retorno;

@@ -28,7 +28,7 @@ class ApiPixController extends Controller
             'valor' => array(
                 'original' => $dados['valor']
             ),
-            'chave' => '996c25d0-b21b-4f9a-8cc7-7c0615a05496',
+            'chave' => '4578b0ea-3bcb-4c5d-ab8f-b7624ad84d69',
             'solicitacaoPagador' => 'Cobranca dos servicos prestados.'
         );
 

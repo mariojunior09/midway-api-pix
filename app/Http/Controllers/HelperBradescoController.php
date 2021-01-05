@@ -82,8 +82,8 @@ class HelperBradescoController extends Controller
             ));
          
             $response = curl_exec($curl);
-            dd(curl_exec($curl));
-            self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
+            //dd(curl_exec($curl));
+           self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
         } catch (\Exception $e) {
@@ -123,7 +123,7 @@ class HelperBradescoController extends Controller
             CURLOPT_SSLKEY         => $certificateSslKey,
             CURLOPT_HTTPHEADER => $headers
         ));
-        
+        dd(curl_exec($curl));
         $response = curl_exec($curl);
         return $response;
         curl_close($curl);
