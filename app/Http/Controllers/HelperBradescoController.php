@@ -97,11 +97,14 @@ class HelperBradescoController extends Controller
         $certificateSslKey = public_path('\files\ww8_libercard_com_br.key');
         $token = self::getAccessToken();
 
+        $access_token = json_decode($token);
+
+      
         //HEADERS
         $headers = [
             'Cache-Control: no-cache',
             'Content-type: application/json',
-            'Authorization: Bearer ' . $token
+            'Authorization: Bearer ' . $access_token->access_token
         ];
 
         //CONFIGURAÇÃO DO CURL
