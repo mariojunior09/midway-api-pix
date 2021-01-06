@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Procedures\HelperProcedures;
 use Illuminate\Support\Facades\Log;
 
+use function GuzzleHttp\json_decode;
 
 class HelperBradescoController extends Controller
 {
@@ -43,7 +44,7 @@ class HelperBradescoController extends Controller
 
         curl_close($curl);
 
-        return  $response;
+        return  json_decode($response);
     }
 
 

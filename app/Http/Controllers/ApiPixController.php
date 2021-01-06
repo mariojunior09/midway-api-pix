@@ -51,9 +51,7 @@ class ApiPixController extends Controller
         $token = HelperProcedures::getToken($chavePix);
         if ($token['id_retorno'] == '99') {
 
-            $accessToken = HelperBradescoController::getAccessToken();
-
-            $token =  json_decode($accessToken);
+            $token = HelperBradescoController::getAccessToken();
             HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
             return $token->access_token;
         } else {
