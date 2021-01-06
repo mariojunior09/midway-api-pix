@@ -33,7 +33,7 @@ class ApiPixController extends Controller
         );
 
         $token = self::verifyToken($array['chave']);
-       
+
         $cobranca = stripslashes(HelperBradescoController::createCobBradesco(json_encode($array), $token));
         $dados = json_decode($cobranca);
 
@@ -72,5 +72,11 @@ class ApiPixController extends Controller
 
         $payLoadQrCode = $obPayload->getPayload();
         return $payLoadQrCode;
+    }
+
+
+    public static function getIbge()
+    {
+       return HelperBradescoController::getIbge();
     }
 }

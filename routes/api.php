@@ -25,5 +25,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::Post('pix-gerar-cobranca','ApiPixController@createCobBradesco');
 Route::get('pix-get-cobranca/{txid}','ApiPixController@getCobrancaBradescoByTxId');
 
+Route::get('get-teste-ibge','ApiPixController@getIbge');
+
 
 

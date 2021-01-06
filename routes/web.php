@@ -20,3 +20,6 @@ use Mpdf\QrCode\Output;
 
 
 
+Route::get('/',function(){
+    return view('welcome');
+});

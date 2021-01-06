@@ -140,4 +140,27 @@ class HelperBradescoController extends Controller
             HelperProcedures::pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_id_cobranc);
         }
     }
+
+
+
+    public static function getIbge()
+    {
+        $url = "https://servicodados.ibge.gov.br/api/v1/localidades/distritos/520005005";
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            
+        ));
+        
+        $response = curl_exec($curl);
+        return $response;
+        curl_close($curl);
+    }
 }
