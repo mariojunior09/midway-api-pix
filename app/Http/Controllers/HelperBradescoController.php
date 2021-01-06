@@ -13,8 +13,6 @@ class HelperBradescoController extends Controller
     {
 
         $baseUrl = 'https://qrpix-h.bradesco.com.br/auth/server/oauth/token';
-        $clientId = 'f45c4278-d929-4a5b-ae26-8b03b9ef3c02';
-        $clientSecret = 'a534714d-c2d8-43d5-b98b-c7e4b4520906';
         $certificate = public_path('/files/mandacaru.crt.pem');
         $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
 
