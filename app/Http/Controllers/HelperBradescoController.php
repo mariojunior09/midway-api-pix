@@ -100,7 +100,7 @@ class HelperBradescoController extends Controller
         $token = self::getAccessToken();
 
         $access_token = json_decode($token);
-       
+       dd($access_token);
         //HEADERS
         $headers = [
             'Cache-Control: no-cache',
