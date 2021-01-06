@@ -31,8 +31,8 @@ class HelperBradescoController extends Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            // CURLOPT_SSLCERT       => $certificate,
-            // CURLOPT_SSLKEY        => $certificateSslKey,
+            CURLOPT_SSLCERT       => $certificate,
+            CURLOPT_SSLKEY        => $certificateSslKey,
             CURLOPT_POSTFIELDS => 'grant_type=client_credentials',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded',
@@ -124,7 +124,7 @@ class HelperBradescoController extends Controller
             CURLOPT_SSLKEY         => $certificateSslKey,
             CURLOPT_HTTPHEADER => $headers
         ));
-        
+        dd(curl_exec($curl));
         $response = curl_exec($curl);
         return $response;
         curl_close($curl);
