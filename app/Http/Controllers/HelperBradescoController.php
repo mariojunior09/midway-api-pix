@@ -50,8 +50,8 @@ class HelperBradescoController extends Controller
     public static function createCobBradesco($dadosCobranca, $token)
     {
         $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
-        $certificate = public_path('\files\mandacaru.crt.pem');
-        $certificateSslKey = public_path('\files\ww8_libercard_com_br.key');
+        $certificate = public_path('/files/mandacaru.crt.pem');
+        $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
         $txId = md5(date('d/m/Y H:i:s') . rand());
 
         try {
@@ -95,8 +95,8 @@ class HelperBradescoController extends Controller
     public static function getCobrancaBradescoByTxId($txId)
     {
         $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
-        $certificate = public_path('\files\mandacaru.crt.pem');
-        $certificateSslKey = public_path('\files\ww8_libercard_com_br.key');
+        $certificate = public_path('/files/mandacaru.crt.pem');
+        $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
         $token = self::getAccessToken();
 
         $access_token = json_decode($token);
