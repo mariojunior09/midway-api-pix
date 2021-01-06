@@ -53,6 +53,7 @@ class ApiPixController extends Controller
 
             $accessToken = stripslashes(HelperBradescoController::getAccessToken());
             $token =  json_decode($accessToken);
+            dd($token);
             HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
             return $token->access_token;
         } else {
