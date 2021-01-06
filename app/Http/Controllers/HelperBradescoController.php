@@ -82,7 +82,6 @@ class HelperBradescoController extends Controller
             ));
          
             $response = curl_exec($curl);
-            dd(curl_exec($curl));
            self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
@@ -100,7 +99,6 @@ class HelperBradescoController extends Controller
         $token = self::getAccessToken();
 
         $access_token = json_decode($token);
-       dd($access_token);
         //HEADERS
         $headers = [
             'Cache-Control: no-cache',
@@ -123,7 +121,6 @@ class HelperBradescoController extends Controller
             CURLOPT_SSLKEY         => $certificateSslKey,
             CURLOPT_HTTPHEADER => $headers
         ));
-    dd(curl_exec($curl));
         $response = curl_exec($curl);
         return $response;
         curl_close($curl);
@@ -141,26 +138,4 @@ class HelperBradescoController extends Controller
         }
     }
 
-
-
-    public static function getIbge()
-    {
-        $url = "https://servicodados.ibge.gov.br/api/v1/localidades/distritos/520005005";
-        $curl = curl_init();
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            
-        ));
-        
-        $response = curl_exec($curl);
-        return $response;
-        curl_close($curl);
-    }
 }

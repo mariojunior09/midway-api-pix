@@ -11,9 +11,6 @@ use function GuzzleHttp\json_decode;
 
 class ApiPixController extends Controller
 {
-
-
-
     public static function createCobBradesco(Request $request)
     {
         $dados = $request['data'];
@@ -53,7 +50,7 @@ class ApiPixController extends Controller
 
             $accessToken = stripslashes(HelperBradescoController::getAccessToken());
             $token =  json_decode($accessToken);
-            dd($token);
+
             HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
             return $token->access_token;
         } else {
@@ -72,11 +69,5 @@ class ApiPixController extends Controller
 
         $payLoadQrCode = $obPayload->getPayload();
         return $payLoadQrCode;
-    }
-
-
-    public static function getIbge()
-    {
-       return HelperBradescoController::getIbge();
     }
 }
