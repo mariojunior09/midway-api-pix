@@ -33,7 +33,7 @@ class ApiPixController extends Controller
         );
 
         $token = self::verifyToken($array['chave']);
-
+       
         $cobranca = stripslashes(HelperBradescoController::createCobBradesco(json_encode($array), $token));
         $dados = json_decode($cobranca);
 
@@ -50,7 +50,9 @@ class ApiPixController extends Controller
     {
         $token = HelperProcedures::getToken($chavePix);
         if ($token['id_retorno'] == '99') {
-            $token = HelperBradescoController::getAccessToken();
+
+            $accessToken = stripslashes(HelperBradescoController::getAccessToken());
+            $token =  json_decode($accessToken);
             HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
             return $token->access_token;
         } else {
