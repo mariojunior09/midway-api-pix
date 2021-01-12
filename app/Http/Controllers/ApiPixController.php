@@ -16,7 +16,7 @@ class ApiPixController extends Controller
         $dados = $request['data'];
         $array = array(
             'calendario' => array(
-                'expiracao' => '36000'
+                'expiracao' => '37000'
             ),
             'devedor' => array(
                 'cpf' => $dados['cpf'],
