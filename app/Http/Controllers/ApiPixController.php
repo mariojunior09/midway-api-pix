@@ -16,7 +16,7 @@ class ApiPixController extends Controller
         $dados = $request['data'];
         $array = array(
             'calendario' => array(
-                'expiracao' => '37000'
+                'expiracao' => '36000'
             ),
             'devedor' => array(
                 'cpf' => $dados['cpf'],
@@ -25,7 +25,7 @@ class ApiPixController extends Controller
             'valor' => array(
                 'original' => $dados['valor']
             ),
-            'chave' => '6c6fb55-a513-4a0d-a2fd-4befl9f64466',
+            'chave' => 'e570607e-3f4d-489a-bc0f-f885b4a59cc9',
             'solicitacaoPagador' => $dados['solicitacaoPagador']
         );
 
@@ -60,6 +60,7 @@ class ApiPixController extends Controller
     public static function payload($dados)
     {
 
+     
         $obPayload = (new Payload)->setMerchantName('Liberarde')
             ->setMerchantCity('Fortaleza')
             ->setAmount($dados->valor->original)
