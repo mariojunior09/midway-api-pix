@@ -60,15 +60,19 @@ class ApiPixController extends Controller
     public static function payload($dados)
     {
 
-     
-        $obPayload = (new Payload)->setMerchantName('Liberarde')
-            ->setMerchantCity('Fortaleza')
-            ->setAmount($dados->valor->original)
-            ->setTxId("***")
-            ->setUrl($dados->location)
-            ->setUniquePayment(true);
+        try {
+            $obPayload = (new Payload)->setMerchantName('Libercard')
+                ->setMerchantCity('Fortaleza')
+                ->setAmount($dados->valor->original)
+                ->setTxId("***")
+                ->setUrl($dados->location)
+                ->setUniquePayment(true);
 
-        $payLoadQrCode = $obPayload->getPayload();
-        return $payLoadQrCode;
+            $payLoadQrCode = $obPayload->getPayload();
+            return response()->json(['data' => ['emv' => $payLoadQrCode, 'sucesso' => 'true', 'mensagem' => 'sucesso']]);
+        } catch (\Throwable $th) {
+            return response()->json(['data' => ['emv' => $th, 'sucesso' => 'false', 'mensagem' => 'ocorreu um erro na geração do qr code']]);
+        }
+
     }
 }
