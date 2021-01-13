@@ -99,9 +99,10 @@ class HelperProcedures
         $dados_recebidos =  json_decode($p_dados_recebidos);
         $data_expiracao =  gmdate("H", $dados_recebidos->calendario->expiracao);
         $hora_hoje = date("H:i:s");
-        $expiracao = date('d/m/y H:i:s', strtotime("+$data_expiracao hour", strtotime($hora_hoje)));
+        $expiracao = date('d/m/Y H:i:s', strtotime("+$data_expiracao hour", strtotime($hora_hoje)));
+  
 
-        $p_data_criacao  =   date('d/m/y H:i:s', strtotime($dados_recebidos->calendario->criacao));
+        $p_data_criacao  =   date('d/m/Y H:i:s', strtotime($dados_recebidos->calendario->criacao));
         $p_data_expiracao = $expiracao;
         $p_devedor_nome     =       $dados_recebidos->devedor->nome;
         $p_devedor_cpf_cnpj =       $dados_recebidos->devedor->cpf;

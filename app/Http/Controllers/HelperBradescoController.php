@@ -80,7 +80,7 @@ class HelperBradescoController extends Controller
             ));
          
             $response = curl_exec($curl);
-            self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
+           self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
         } catch (\Exception $e) {
@@ -132,6 +132,7 @@ class HelperBradescoController extends Controller
         if (isset($result->codigoErro)) {
             HelperProcedures::pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint);
         } else {
+            HelperProcedures::pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint);
             HelperProcedures::pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_id_cobranc);
         }
     }
