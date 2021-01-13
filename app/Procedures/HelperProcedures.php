@@ -146,7 +146,10 @@ class HelperProcedures
         $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->bindParam(':p_msg_retorno', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->execute();
-        Log::info($p_msg_retorno, $id_retorno);
+        if ($id_retorno == 99) {
+            Log::info($p_msg_retorno);
+        }
+
         return $p_msg_retorno;
     }
 }
