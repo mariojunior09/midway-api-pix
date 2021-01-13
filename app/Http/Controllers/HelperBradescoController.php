@@ -80,7 +80,7 @@ class HelperBradescoController extends Controller
             ));
          
             $response = curl_exec($curl);
-           self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
+            self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
         } catch (\Exception $e) {

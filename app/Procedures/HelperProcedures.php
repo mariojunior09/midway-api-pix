@@ -3,6 +3,7 @@
 namespace App\Procedures;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 use function PHPSTORM_META\type;
 
@@ -128,7 +129,7 @@ class HelperProcedures
             :p_chave_pix, 
 
             :p_id_retorno,
-            :p_msg_retorn); end;");
+            :p_msg_retorno); end;");
 
         $stmt->bindParam(':p_id_cobranca', $p_id_cobranca, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_data_criacao', $p_data_criacao, \PDO::PARAM_STR, 500);
@@ -141,10 +142,11 @@ class HelperProcedures
         $stmt->bindParam(':p_location', $p_location, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_chave_pix', $p_chave_pix, \PDO::PARAM_STR, 500);
 
-        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
-        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
-        $stmt->execute();
 
+        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorno', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->execute();
+        Log::info($p_msg_retorno, $id_retorno);
         return $p_msg_retorno;
     }
 }
