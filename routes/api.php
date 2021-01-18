@@ -22,7 +22,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 
-Route::Post('pix-gerar-cobranca','ApiPixController@createCobBradesco');
+Route::post('pix-gerar-cobranca','ApiPixController@createCobBradesco');
+Route::post('get-cobranca-webhook','ApiPixController@getCobByWebHook');
 Route::get('pix-get-cobranca/{txid}','ApiPixController@getCobrancaBradescoByTxId');
 
 

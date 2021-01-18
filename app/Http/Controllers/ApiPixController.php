@@ -6,6 +6,7 @@ use App\helpers\HelperCreateToken;
 use App\pix\Payload;
 use App\Procedures\HelperProcedures;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 use function GuzzleHttp\json_decode;
 
@@ -74,5 +75,11 @@ class ApiPixController extends Controller
             return response()->json(['data' => ['emv' => $th, 'sucesso' => 'false', 'mensagem' => 'ocorreu um erro na geração do qr code']]);
         }
 
+    }
+
+    
+    public static function getCobByWebHook(Request $request)
+    {
+        Log::info($request);
     }
 }

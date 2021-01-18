@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Procedures\HelperProcedures;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 
@@ -76,11 +77,11 @@ class HelperBradescoController extends Controller
                 CURLOPT_SSLKEY         => $certificateSslKey,
                 CURLOPT_POSTFIELDS => $dadosCobranca,
                 CURLOPT_HTTPHEADER => $headers
-                
+
             ));
-         
+
             $response = curl_exec($curl);
-           self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
+            self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
             return $response;
             curl_close($curl);
         } catch (\Exception $e) {
@@ -101,7 +102,7 @@ class HelperBradescoController extends Controller
         $headers = [
             'Cache-Control: no-cache',
             'Content-type: application/json',
-            'Authorization: Bearer ' .$access_token->access_token
+            'Authorization: Bearer ' . $access_token->access_token
         ];
 
         //CONFIGURAÇÃO DO CURL
@@ -137,4 +138,8 @@ class HelperBradescoController extends Controller
         }
     }
 
+    public static function getCobByWebHook(Request $request)
+    {
+        Log::info($request);
+    }
 }
