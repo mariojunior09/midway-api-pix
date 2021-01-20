@@ -5,8 +5,6 @@ namespace App\Procedures;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-use function PHPSTORM_META\type;
-
 class HelperProcedures
 {
     public static function getToken($p_chave_pix)
@@ -62,35 +60,6 @@ class HelperProcedures
         return $p_msg_retorno;
     }
 
-    public static function pr_log_insere(
-        $p_dados_enviados,
-        $p_dados_recebidos,
-        $p_endpoint,
-        $p_id_cobranca = null
-    ) {
-        $id_retorno = &$p_id_retorno;
-        $msg_retorno = &$p_msg_retorno;
-        $db = DB::connection()->getPdo();
-
-        $stmt = $db->prepare("begin pk_pix.pr_log_insere(
-            :p_dados_enviados,
-            :p_dados_recebidos,
-            :p_endpoint,
-            :p_id_cobranca,
-            :p_id_retorno,
-            :p_msg_retorn); end;");
-
-        $stmt->bindParam(':p_dados_enviados', $p_dados_enviados, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_dados_recebidos', $p_dados_recebidos, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_endpoint', $p_endpoint, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_id_cobranca', $p_id_cobranca, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
-        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
-        $stmt->execute();
-        return $p_msg_retorno;
-    }
-
-
     public static function pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_id_cobranca)
     {
 
@@ -100,7 +69,7 @@ class HelperProcedures
         $data_expiracao =  gmdate("H", $dados_recebidos->calendario->expiracao);
         $hora_hoje = date("H:i:s");
         $expiracao = date('d/m/Y H:i:s', strtotime("+$data_expiracao hour", strtotime($hora_hoje)));
-  
+
 
         $p_data_criacao  =   date('d/m/Y H:i:s', strtotime($dados_recebidos->calendario->criacao));
         $p_data_expiracao = $expiracao;
@@ -151,6 +120,72 @@ class HelperProcedures
             Log::info($p_msg_retorno);
         }
 
+        return $p_msg_retorno;
+    }
+
+    public static function pr_cobranca_atualiza_wh(
+        $p_id_cobranca,
+        $p_id_status,
+        $p_e2edid,
+        $p_data_pagamento,
+        $p_pagador_cpf_cnpj,
+        $p_pagadpor_nome,
+        $p_info_pagador,
+        $p_valor)
+    {
+     
+        $id_retorno = &$p_id_retorno;
+        $msg_retorno = &$p_msg_retorno;
+        $db = DB::connection()->getPdo();
+
+        $stmt = $db->prepare("begin pk_pix.pr_cobranca_atualiza_wh(
+            :p_id_cobranca,
+            :p_id_status,
+            :p_e2edid,
+            :p_data_pagamento,
+            :p_pagador_cpf_cnpj,
+            :p_pagadpor_nome,
+            :p_info_pagador,
+            :p_valor,
+            :p_id_retorno,
+            :p_msg_retorn); end;");
+
+        $stmt->bindParam(':p_id_cobranca', $p_id_cobranca, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_id_status', $p_id_status, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_e2edid', $p_e2edid, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_data_pagamento', $p_data_pagamento, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_pagador_cpf_cnpj', $p_pagador_cpf_cnpj, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_pagadpor_nome', $p_pagadpor_nome, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_info_pagador', $p_info_pagador, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_valor', $p_valor, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->execute();
+        return $p_msg_retorno;
+        
+    }
+
+    public static function pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint, $p_id_cobranca = null)
+    {
+        $id_retorno = &$p_id_retorno;
+        $msg_retorno = &$p_msg_retorno;
+        $db = DB::connection()->getPdo();
+
+        $stmt = $db->prepare("begin pk_pix.pr_log_insere(
+            :p_dados_enviados,
+            :p_dados_recebidos,
+            :p_endpoint,
+            :p_id_cobranca,
+            :p_id_retorno,
+            :p_msg_retorn); end;");
+
+        $stmt->bindParam(':p_dados_enviados', $p_dados_enviados, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_dados_recebidos', $p_dados_recebidos, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_endpoint', $p_endpoint, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_id_cobranca', $p_id_cobranca, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->execute();
         return $p_msg_retorno;
     }
 }
