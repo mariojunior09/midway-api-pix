@@ -123,8 +123,7 @@ class HelperProcedures
         return $p_msg_retorno;
     }
 
-    public static function pr_cobranca_atualiza_wh(
-        $p_id_cobranca,
+    public static function pr_cobranca_atualiza_wh($p_id_cobranca,
         $p_id_status,
         $p_e2edid,
         $p_data_pagamento,
