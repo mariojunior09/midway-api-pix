@@ -170,7 +170,6 @@ class HelperBradescoController extends Controller
         curl_close($curl);
     }
 
-    
 
     public static function saveLogs($p_dados_enviados, $p_dados_recebidos, $p_endpoint, $p_id_cobranc = null)
     {
