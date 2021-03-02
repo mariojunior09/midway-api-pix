@@ -16,7 +16,7 @@ class HelperBradescoController extends Controller
         $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
         $token = self::getAccessToken();
         $access_token = json_decode($token);
-       
+
 
         try {
             //HEADERS
@@ -53,7 +53,7 @@ class HelperBradescoController extends Controller
         }
     }
 
-    
+
     public static function getAccessToken()
     {
 
@@ -90,7 +90,7 @@ class HelperBradescoController extends Controller
     }
 
 
-    public static function createCobBradesco($dadosCobranca, $token)
+    public static function createCobBradesco($dadosCobranca, $token, $origemCobranca, $idCobOrigem)
     {
         $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
         $certificate = public_path('/files/mandacaru.crt.pem');
@@ -125,8 +125,12 @@ class HelperBradescoController extends Controller
             ));
 
             $response = curl_exec($curl);
-            self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId);
-            return $response;
+            $dataRes =  self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId, $origemCobranca, $idCobOrigem);
+            $arrayRes = array(
+                'rescURL' => $response,
+                'dataResProcedure' => $dataRes
+            );
+            return $arrayRes;
             curl_close($curl);
         } catch (\Exception $e) {
             Log::info($e);
@@ -171,14 +175,15 @@ class HelperBradescoController extends Controller
     }
 
 
-    public static function saveLogs($p_dados_enviados, $p_dados_recebidos, $p_endpoint, $p_id_cobranc = null)
+    public static function saveLogs($p_dados_enviados, $p_dados_recebidos, $p_endpoint, $p_id_cobranc = null, $origemCobranca, $idCobOrigem = null)
     {
         $result = json_decode(stripslashes($p_dados_recebidos));
         if (isset($result->codigoErro)) {
             HelperProcedures::pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint);
         } else {
             HelperProcedures::pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint);
-            HelperProcedures::pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_id_cobranc);
+            $dataRes =  HelperProcedures::pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_id_cobranc, $origemCobranca, $idCobOrigem);
+            return  $dataRes;
         }
     }
 }

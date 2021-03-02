@@ -16,6 +16,8 @@ class ApiPixController extends Controller
     public static function createCobBradesco(Request $request)
     {
         $dados = $request['data'];
+        $origemCobranca = $dados['origem_cobranca'];
+        $idCobOrigem = $dados['id_cob_origem'];
         $array = array(
             'calendario' => array(
                 'expiracao' => '36000'
@@ -28,15 +30,16 @@ class ApiPixController extends Controller
                 'original' => $dados['valor']
             ),
             'chave' => 'e570607e-3f4d-489a-bc0f-f885b4a59cc9',
-            'solicitacaoPagador' => $dados['solicitacaoPagador']
+            'solicitacaoPagador' => $dados['nome']
         );
 
         $token = self::verifyToken($array['chave']);
 
-        $cobranca = stripslashes(HelperBradescoController::createCobBradesco(json_encode($array), $token));
-        $dados = json_decode($cobranca);
+        $cobranca = HelperBradescoController::createCobBradesco(json_encode($array), $token, $origemCobranca, $idCobOrigem);
 
-        return self::payload($dados);
+        $dados = json_decode($cobranca['rescURL']);
+
+        return self::payload($dados, $cobranca['dataResProcedure']);
     }
 
     public static function getCobrancaBradescoByTxId($txId)
@@ -60,7 +63,7 @@ class ApiPixController extends Controller
         };
     }
 
-    public static function payload($dados)
+    public static function payload($dados, $resProcedure)
     {
 
         try {
@@ -72,7 +75,10 @@ class ApiPixController extends Controller
                 ->setUniquePayment(true);
 
             $payLoadQrCode = $obPayload->getPayload();
-            return response()->json(['data' => ['emv' => $payLoadQrCode, 'sucesso' => 'true', 'mensagem' => 'sucesso']]);
+            return response()->json(['data' => [
+                'emv' => $payLoadQrCode,
+                'menssage' => $resProcedure
+            ]]);
         } catch (\Throwable $th) {
             return response()->json(['data' => ['emv' => $th, 'sucesso' => 'false', 'mensagem' => 'ocorreu um erro na geração do qr code']]);
         }
