@@ -130,6 +130,7 @@ class HelperBradescoController extends Controller
                 'rescURL' => $response,
                 'dataResProcedure' => $dataRes
             );
+            dd($arrayRes);
             return $arrayRes;
             curl_close($curl);
         } catch (\Exception $e) {
