@@ -125,7 +125,6 @@ class HelperBradescoController extends Controller
             ));
 
             $response = curl_exec($curl);
-            dd($response);
             $dataRes =  self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId, $origemCobranca, $idCobOrigem);
             $arrayRes = array(
                 'rescURL' => $response,
