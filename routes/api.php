@@ -30,3 +30,4 @@ Route::get('pix-get-cobranca/{txid}','ApiPixController@getCobrancaBradescoByTxId
 
 
 
+Route::get('teste-webhook','ApiPixController@testeWebhook');

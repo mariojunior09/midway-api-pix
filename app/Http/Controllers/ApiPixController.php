@@ -18,6 +18,7 @@ class ApiPixController extends Controller
         $dados = $request['data'];
         $origemCobranca = $dados['origem_cobranca'];
         $idCobOrigem = $dados['id_cob_origem'];
+
         $array = array(
             'calendario' => array(
                 'expiracao' => '36000'
@@ -30,13 +31,13 @@ class ApiPixController extends Controller
                 'original' => $dados['valor']
             ),
             'chave' => 'e570607e-3f4d-489a-bc0f-f885b4a59cc9',
-            'solicitacaoPagador' => $dados['nome']
+            'solicitacaoPagador' => $dados['origemPagador']
         );
 
         $token = self::verifyToken($array['chave']);
 
         $cobranca = HelperBradescoController::createCobBradesco(json_encode($array), $token, $origemCobranca, $idCobOrigem);
-        
+
         $dados = json_decode($cobranca['rescURL']);
 
         return self::payload($dados, $cobranca['dataResProcedure']);
@@ -116,5 +117,45 @@ class ApiPixController extends Controller
     public static function putWebHookUrl($urlWebHook)
     {
         return HelperBradescoController::putWebHookUrl($urlWebHook);
+    }
+
+
+    public function testeWebhook()
+    {
+        $urlbase = 'https://www5.libercard.com.br/api/get-cobranca-webhook/e570607e-3f4d-489a-bc0f-f885b4a59cc9';
+        $certificate = public_path('/files/certtest2.crt');
+        $certificateSslKey = public_path('/files/certtest2.key');
+        try {
+            //HEADERS
+            $headers = [
+                'Cache-Control: no-cache',
+                'Content-type: application/json',
+            ];
+
+
+            //CONFIGURAÇÃO DO CURL
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL =>  $urlbase,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_SSLCERT        => $certificate,
+                CURLOPT_SSLKEY         => $certificateSslKey,
+                CURLOPT_HTTPHEADER => $headers
+
+            ));
+
+            $response = curl_exec($curl);
+            return $response;
+            curl_close($curl);
+        } catch (\Exception $e) {
+            Log::info($e);
+        }
+        
     }
 }
