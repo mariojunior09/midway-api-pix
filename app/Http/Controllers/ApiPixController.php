@@ -18,7 +18,6 @@ class ApiPixController extends Controller
         $dados = $request['data'];
         $origemCobranca = $dados['origem_cobranca'];
         $idCobOrigem = $dados['id_cob_origem'];
-
         $array = array(
             'calendario' => array(
                 'expiracao' => '36000'
