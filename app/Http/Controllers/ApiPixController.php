@@ -30,7 +30,7 @@ class ApiPixController extends Controller
                 'original' => $dados['valor']
             ),
             'chave' => 'e570607e-3f4d-489a-bc0f-f885b4a59cc9',
-            'solicitacaoPagador' => $dados['origemPagador']
+            'solicitacaoPagador' => $dados['solicitacaoPagador']
         );
 
         $token = self::verifyToken($array['chave']);
