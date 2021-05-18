@@ -1,14 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\PixModel as pixmodel;
 use App\Procedures\HelperProcedures;
 use Illuminate\Support\Facades\Log;
 
+
 class HelperBradescoController extends Controller
 {
+
     public static function putWebHookUrl($urlWebHook)
     {
-        $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
+        $endpt_cria_cob =  pixmodel::vw_banco();
+        $urlbase = $endpt_cria_cob->endpt_cria_cob;
         $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
         $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
         $token = self::getAccessToken();
@@ -54,9 +59,11 @@ class HelperBradescoController extends Controller
     public static function getAccessToken()
     {
 
-        $baseUrl = 'https://qrpix-h.bradesco.com.br/auth/server/oauth/token';
+        $endpt_token = pixmodel::vw_banco();
+        $baseUrl = $endpt_token->endpt_token;
         $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
         $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
+
 
         //ENDPOINT COMPLETO
         $curl = curl_init();
@@ -75,21 +82,21 @@ class HelperBradescoController extends Controller
             CURLOPT_POSTFIELDS => 'grant_type=client_credentials',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded',
-                'Authorization: basic ZjQ1YzQyNzgtZDkyOS00YTViLWFlMjYtOGIwM2I5ZWYzYzAyOmE1MzQ3MTRkLWMyZDgtNDNkNS1iOThiLWM3ZTRiNDUyMDkwNg=='
+                'Authorization: basic OGQ3M2ZlNzAtNDJhMC00OTVlLWI2YzAtMGNkNTg3ZDQ4NWRhOmM4ZDE0NDY1LWUwYTQtNDMxNC05MzdlLWYwMWQzZTc5NTI3ZA=='
             ),
         ));
 
         $response = curl_exec($curl);
 
         curl_close($curl);
-
         return  $response;
     }
 
 
     public static function createCobBradesco($dadosCobranca, $token, $origemCobranca, $idCobOrigem)
     {
-        $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
+        $endpt_cria_cob =  pixmodel::vw_banco();
+        $urlbase = $endpt_cria_cob->endpt_cria_cob;
         $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
         $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
         $txId = md5(date('d/m/Y H:i:s') . rand());
@@ -127,7 +134,7 @@ class HelperBradescoController extends Controller
                 'rescURL' => $response,
                 'dataResProcedure' => $dataRes
             );
-            
+
             return $arrayRes;
             curl_close($curl);
         } catch (\Exception $e) {
@@ -139,7 +146,8 @@ class HelperBradescoController extends Controller
 
     public static function getCobrancaBradescoByTxId($txId)
     {
-        $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
+        $endpt_consulta_cob = pixmodel::vw_banco();
+        $urlbase = $endpt_consulta_cob->endpt_consulta_cob;
         $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
         $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
         $token = self::getAccessToken();

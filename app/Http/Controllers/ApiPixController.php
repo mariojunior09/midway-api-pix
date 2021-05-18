@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\pix\Payload;
+use App\PixModel;
 use App\Procedures\HelperProcedures;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,8 @@ class ApiPixController extends Controller
 {
     public static function createCobBradesco(Request $request)
     {
+        $pixModel  =  new PixModel();
+        $chavePix = $pixModel->vw_chave_pix();
         $dados = $request['data'];
         $origemCobranca = $dados['origem_cobranca'];
         $idCobOrigem = $dados['id_cob_origem'];
@@ -27,7 +30,7 @@ class ApiPixController extends Controller
             'valor' => array(
                 'original' => $dados['valor']
             ),
-            'chave' => 'e570607e-3f4d-489a-bc0f-f885b4a59cc9',
+            'chave' => $chavePix[0]->chave_pix,
             'solicitacaoPagador' => $dados['solicitacaoPagador']
         );
 
@@ -49,11 +52,11 @@ class ApiPixController extends Controller
     public static function verifyToken($chavePix)
     {
         $token = HelperProcedures::getToken($chavePix);
+
         if ($token['id_retorno'] == '99') {
 
             $accessToken = stripslashes(HelperBradescoController::getAccessToken());
             $token =  json_decode($accessToken);
-
             HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
             return $token->access_token;
         } else {
@@ -153,6 +156,5 @@ class ApiPixController extends Controller
         } catch (\Exception $e) {
             Log::info($e);
         }
-        
     }
 }
