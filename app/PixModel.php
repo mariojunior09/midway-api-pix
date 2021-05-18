@@ -18,4 +18,12 @@ class PixModel extends Model
     {
         return DB::table('VW_BANCO')->first();
     }
+
+
+    public  function vw_config()
+    {
+        return DB::table('vw_config')
+        ->where('id_config','=', '1')
+        ->first();
+    }
 }

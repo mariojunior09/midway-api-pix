@@ -16,12 +16,13 @@ class ApiPixController extends Controller
     {
         $pixModel  =  new PixModel();
         $chavePix = $pixModel->vw_chave_pix();
+        $expiracao = $pixModel->vw_config();
         $dados = $request['data'];
         $origemCobranca = $dados['origem_cobranca'];
         $idCobOrigem = $dados['id_cob_origem'];
         $array = array(
             'calendario' => array(
-                'expiracao' => '36000'
+                'expiracao' => $expiracao->valor
             ),
             'devedor' => array(
                 'cpf' => $dados['cpf'],

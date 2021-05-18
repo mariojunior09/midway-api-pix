@@ -30,7 +30,7 @@ Route::get('teste-webhook', 'ApiPixController@testeWebhook');
 
 Route::get('teste', function () {
     $pixModel  =  new PixModel();
-    $dadosPix = $pixModel->vw_banco();
+    $dadosPix = $pixModel->vw_config();
     dd($dadosPix);
     return  $dadosPix;
 });
