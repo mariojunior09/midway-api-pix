@@ -1,19 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Procedures\HelperProcedures;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-
 
 class HelperBradescoController extends Controller
 {
     public static function putWebHookUrl($urlWebHook)
     {
         $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
-        $certificate = public_path('/files/mandacaru.crt.pem');
-        $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
+        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
+        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
         $token = self::getAccessToken();
         $access_token = json_decode($token);
 
@@ -58,8 +55,8 @@ class HelperBradescoController extends Controller
     {
 
         $baseUrl = 'https://qrpix-h.bradesco.com.br/auth/server/oauth/token';
-        $certificate = public_path('/files/mandacaru.crt.pem');
-        $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
+        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
+        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
 
         //ENDPOINT COMPLETO
         $curl = curl_init();
@@ -93,8 +90,8 @@ class HelperBradescoController extends Controller
     public static function createCobBradesco($dadosCobranca, $token, $origemCobranca, $idCobOrigem)
     {
         $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
-        $certificate = public_path('/files/mandacaru.crt.pem');
-        $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
+        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
+        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
         $txId = md5(date('d/m/Y H:i:s') . rand());
 
         try {
@@ -143,8 +140,8 @@ class HelperBradescoController extends Controller
     public static function getCobrancaBradescoByTxId($txId)
     {
         $urlbase = 'https://qrpix-h.bradesco.com.br/v1/spi/cob/';
-        $certificate = public_path('/files/mandacaru.crt.pem');
-        $certificateSslKey = public_path('/files/ww8_libercard_com_br.key');
+        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
+        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
         $token = self::getAccessToken();
 
         $access_token = json_decode($token);

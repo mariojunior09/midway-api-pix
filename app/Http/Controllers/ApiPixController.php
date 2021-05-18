@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\helpers\HelperCreateToken;
 use App\pix\Payload;
 use App\Procedures\HelperProcedures;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use SebastianBergmann\Environment\Console;
 
 use function GuzzleHttp\json_decode;
 
