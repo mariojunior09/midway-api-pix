@@ -60,8 +60,14 @@ class HelperProcedures
         return $p_msg_retorno;
     }
 
-    public static function pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_tx_id, $origemCobranca, $idCobOrigem)
-    {
+    public static function pr_cobranca_insere(
+        $p_dados_enviados,
+        $p_dados_recebidos,
+        $p_tx_id,
+        $origemCobranca,
+        $idCobOrigem,
+        $emv = null
+    ) {
 
         $dadodos_enviados = json_decode($p_dados_enviados);
 
@@ -101,6 +107,7 @@ class HelperProcedures
             :p_chave_pix, 
             :p_id_origem,
             :p_id_trans_origem,
+            :p_emv,
             :p_id_trans_rede,
             :p_id_cobranca,
             :p_id_retorno,
@@ -118,11 +125,12 @@ class HelperProcedures
         $stmt->bindParam(':p_chave_pix', $p_chave_pix, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_id_origem', $p_id_origem, \PDO::PARAM_STR, 500);
         $stmt->bindParam(':p_id_trans_origem', $p_id_trans_origem, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_emv', $p_id_trans_origem, \PDO::PARAM_STR, 500);
 
         $stmt->bindParam(':p_id_trans_rede', $id_trans_rede, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->bindParam(':p_id_cobranca', $id_cobranca, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
-        $stmt->bindParam(':p_msg_retorno', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorno', $emv, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
 
 
 

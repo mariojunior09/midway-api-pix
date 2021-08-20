@@ -14,8 +14,8 @@ class HelperBradescoController extends Controller
     {
         $endpt_cria_cob =  pixmodel::vw_banco();
         $urlbase = $endpt_cria_cob->endpt_cria_cob;
-        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
-        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
+        $certificate = public_path("/files/$endpt_cria_cob->cert_pem");
+        $certificateSslKey = public_path("/files/$endpt_cria_cob->cert_key");
         $token = self::getAccessToken();
         $access_token = json_decode($token);
 
@@ -61,8 +61,8 @@ class HelperBradescoController extends Controller
 
         $endpt_token = pixmodel::vw_banco();
         $baseUrl = $endpt_token->endpt_token;
-        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
-        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
+        $certificate = public_path("/files/$endpt_token->cert_pem");
+        $certificateSslKey = public_path("/files/$endpt_token->cert_key");
 
 
         //ENDPOINT COMPLETO
@@ -82,12 +82,11 @@ class HelperBradescoController extends Controller
             CURLOPT_POSTFIELDS => 'grant_type=client_credentials',
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/x-www-form-urlencoded',
-                'Authorization: basic OGQ3M2ZlNzAtNDJhMC00OTVlLWI2YzAtMGNkNTg3ZDQ4NWRhOmM4ZDE0NDY1LWUwYTQtNDMxNC05MzdlLWYwMWQzZTc5NTI3ZA=='
+                "Authorization: basic $endpt_token->authorization"
             ),
         ));
 
         $response = curl_exec($curl);
-
         curl_close($curl);
         return  $response;
     }
@@ -97,8 +96,8 @@ class HelperBradescoController extends Controller
     {
         $endpt_cria_cob =  pixmodel::vw_banco();
         $urlbase = $endpt_cria_cob->endpt_cria_cob;
-        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
-        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
+        $certificate = public_path("/files/$endpt_cria_cob->cert_pem");
+        $certificateSslKey = public_path("/files/$endpt_cria_cob->cert_key");
         $txId = md5(date('d/m/Y H:i:s') . rand());
 
         try {
@@ -134,7 +133,6 @@ class HelperBradescoController extends Controller
                 'rescURL' => $response,
                 'dataResProcedure' => $dataRes
             );
-
             return $arrayRes;
             curl_close($curl);
         } catch (\Exception $e) {
@@ -148,8 +146,8 @@ class HelperBradescoController extends Controller
     {
         $endpt_consulta_cob = pixmodel::vw_banco();
         $urlbase = $endpt_consulta_cob->endpt_consulta_cob;
-        $certificate = public_path('/files/mandacaru-prod-spb.crt.pem');
-        $certificateSslKey = public_path('/files/mandacaru-prod-spb.key');
+        $certificate = public_path("/files/$endpt_consulta_cob->cert_pem");
+        $certificateSslKey = public_path("/files/$endpt_consulta_cob->cert_key");
         $token = self::getAccessToken();
 
         $access_token = json_decode($token);
@@ -183,12 +181,19 @@ class HelperBradescoController extends Controller
 
     public static function saveLogs($p_dados_enviados, $p_dados_recebidos, $p_endpoint, $p_id_cobranc = null, $origemCobranca, $idCobOrigem = null)
     {
+
         $result = json_decode(stripslashes($p_dados_recebidos));
         if (isset($result->codigoErro)) {
             HelperProcedures::pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint);
         } else {
             HelperProcedures::pr_log_insere($p_dados_enviados, $p_dados_recebidos, $p_endpoint);
-            $dataRes =  HelperProcedures::pr_cobranca_insere($p_dados_enviados, $p_dados_recebidos, $p_id_cobranc, $origemCobranca, $idCobOrigem);
+            $dataRes =  HelperProcedures::pr_cobranca_insere(
+                $p_dados_enviados,
+                $p_dados_recebidos,
+                $p_id_cobranc,
+                $origemCobranca,
+                $idCobOrigem
+            );
             return  $dataRes;
         }
     }
