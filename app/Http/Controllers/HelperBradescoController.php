@@ -131,7 +131,8 @@ class HelperBradescoController extends Controller
             $dataRes =  self::saveLogs($dadosCobranca, $response, $urlbase . $txId, $txId, $origemCobranca, $idCobOrigem);
             $arrayRes = array(
                 'rescURL' => $response,
-                'dataResProcedure' => $dataRes
+                'dataResProcedure' => $dataRes,
+                'txId' => $txId
             );
             return $arrayRes;
             curl_close($curl);

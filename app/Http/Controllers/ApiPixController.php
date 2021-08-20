@@ -7,6 +7,7 @@ use App\PixModel;
 use App\Procedures\HelperProcedures;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Console\Helper\Helper;
 
 use function GuzzleHttp\json_decode;
 
@@ -41,7 +42,7 @@ class ApiPixController extends Controller
 
         $dados = json_decode($cobranca['rescURL']);
 
-        return self::payload($dados, $cobranca['dataResProcedure']);
+        return self::payload($dados, $cobranca);
     }
 
     public static function getCobrancaBradescoByTxId($txId)
@@ -65,7 +66,6 @@ class ApiPixController extends Controller
 
     public static function payload($dados, $resProcedure)
     {
-
         try {
             $obPayload = (new Payload)->setMerchantName('Libercard')
                 ->setMerchantCity('Fortaleza')
@@ -75,11 +75,13 @@ class ApiPixController extends Controller
                 ->setUniquePayment(true);
 
             $payLoadQrCode = $obPayload->getPayload();
+            HelperProcedures::pr_cobranca_upd_emv($resProcedure['txId'], $payLoadQrCode);
             return response()->json(['data' => [
                 'emv' => $payLoadQrCode,
-                'menssage' => $resProcedure
+                'menssage' => $resProcedure['dataResProcedure']
             ]]);
         } catch (\Throwable $th) {
+            dd($th);
             return response()->json(['data' => ['emv' => $th, 'sucesso' => 'false', 'mensagem' => 'ocorreu um erro na geração do qr code']]);
         }
     }
@@ -157,4 +159,3 @@ class ApiPixController extends Controller
         }
     }
 }
- 

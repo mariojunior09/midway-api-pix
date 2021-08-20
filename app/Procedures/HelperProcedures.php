@@ -211,4 +211,26 @@ class HelperProcedures
         $stmt->execute();
         return $p_msg_retorno;
     }
+
+
+    public static function pr_cobranca_upd_emv($txId, $emv)
+    {
+        $id_retorno = &$p_id_retorno;
+        $msg_retorno = &$p_msg_retorno;
+
+        $db = DB::connection()->getPdo();
+        $stmt = $db->prepare("begin pk_pix.pr_cobranca_upd_emv(
+            :p_tx_id,
+            :p_emv,
+
+            :p_id_retorno,
+            :p_msg_retorn); end;");
+        $stmt->bindParam(':p_tx_id', $txId, \PDO::PARAM_STR, 500);
+        $stmt->bindParam(':p_emv', $emv, \PDO::PARAM_STR, 500);
+
+        $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->execute();
+        return $msg_retorno;
+    }
 }
