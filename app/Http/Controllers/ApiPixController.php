@@ -38,7 +38,12 @@ class ApiPixController extends Controller
 
         $token = self::verifyToken($array['chave']);
 
-        $cobranca = HelperBradescoController::createCobBradesco(json_encode($array), $token, $origemCobranca, $idCobOrigem);
+        $cobranca = HelperBradescoController::createCobBradesco(
+            json_encode($array),
+            $token,
+            $origemCobranca,
+            $idCobOrigem
+        );
 
         $dados = json_decode($cobranca['rescURL']);
 
