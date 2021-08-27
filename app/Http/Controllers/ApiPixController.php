@@ -13,7 +13,7 @@ use function GuzzleHttp\json_decode;
 
 class ApiPixController extends Controller
 {
-    public static function createCobBradesco(Request $request)
+    public static function criarCobrancaBradesco(Request $request)
     {
         $pixModel  =  new PixModel();
         $chavePix = $pixModel->vw_chave_pix();
@@ -21,6 +21,8 @@ class ApiPixController extends Controller
         $dados = $request['data'];
         $origemCobranca = $dados['origem_cobranca'];
         $idCobOrigem = $dados['id_cob_origem'];
+
+        
         $array = array(
             'calendario' => array(
                 'expiracao' => $expiracao->valor
@@ -38,7 +40,7 @@ class ApiPixController extends Controller
 
         $token = self::verifyToken($array['chave']);
 
-        $cobranca = HelperBradescoController::createCobBradesco(
+        $cobranca = HelperBradescoController::criarCobrancaBradesco(
             json_encode($array),
             $token,
             $origemCobranca,

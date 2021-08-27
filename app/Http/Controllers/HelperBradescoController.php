@@ -92,7 +92,7 @@ class HelperBradescoController extends Controller
     }
 
 
-    public static function createCobBradesco($dadosCobranca, $token, $origemCobranca, $idCobOrigem)
+    public static function criarCobrancaBradesco($dadosCobranca, $token, $origemCobranca, $idCobOrigem)
     {
         $endpt_cria_cob =  pixmodel::vw_banco();
         $urlbase = $endpt_cria_cob->endpt_cria_cob;
