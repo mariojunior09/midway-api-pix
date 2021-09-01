@@ -11,7 +11,7 @@ class PixModel extends Model
     {
         return DB::table('VW_CHAVE_PIX')
             ->select('chave_pix')
-            ->get();
+            ->first();
     }
 
     public static function vw_banco()

@@ -6,74 +6,76 @@ use App\pix\Payload;
 use App\PixModel;
 use App\Procedures\HelperProcedures;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\Console\Helper\Helper;
 
 use function GuzzleHttp\json_decode;
 
 class ApiPixController extends Controller
 {
-    public static function criarCobrancaBradesco(Request $request)
+    public  function criarCobrancaBradesco(Request $request)
     {
         $pixModel  =  new PixModel();
+        $bradesco = new HelperBradescoController();
+
         $chavePix = $pixModel->vw_chave_pix();
         $expiracao = $pixModel->vw_config();
         $dados = $request['data'];
         $origemCobranca = $dados['origem_cobranca'];
         $idCobOrigem = $dados['id_cob_origem'];
 
-        
-        $array = array(
-            'calendario' => array(
+        $dadosEnviados = [
+            'calendario' => [
                 'expiracao' => $expiracao->valor
-            ),
-            'devedor' => array(
+            ],
+            'devedor' => [
                 'cpf' => $dados['cpf'],
                 'nome' => $dados['nome']
-            ),
-            'valor' => array(
+            ],
+            'valor' => [
                 'original' => $dados['valor']
-            ),
-            'chave' => $chavePix[0]->chave_pix,
+            ],
+            'chave' => $chavePix->chave_pix,
             'solicitacaoPagador' => $dados['solicitacaoPagador']
-        );
+        ];
 
-        $token = self::verifyToken($array['chave']);
-
-        $cobranca = HelperBradescoController::criarCobrancaBradesco(
-            json_encode($array),
+        $token = self::verificaToken($chavePix->chave_pix);
+        $dadosEnviados = json_encode($dadosEnviados);
+        $cobranca = $bradesco->criarCobrancaBradesco(
+            $dadosEnviados,
             $token,
             $origemCobranca,
             $idCobOrigem
         );
 
-        $dados = json_decode($cobranca['rescURL']);
-
-        return self::payload($dados, $cobranca);
+        return self::payload($cobranca->rescURL, $cobranca);
     }
 
     public static function getCobrancaBradescoByTxId($txId)
     {
-
-        return HelperBradescoController::getCobrancaBradescoByTxId($txId);
+        $bradesco = new HelperBradescoController();
+        return $bradesco->getCobrancaBradescoByTxId($txId);
     }
 
-    public static function verifyToken($chavePix)
+    public static function verificaToken($chavePix)
     {
-        $token = HelperProcedures::getToken($chavePix);
+        $pocedures = new HelperProcedures();
+        $bradesco = new HelperBradescoController();
+
+        $token = $pocedures->getToken($chavePix);
         if ($token['id_retorno'] == '99') {
-            $accessToken = stripslashes(HelperBradescoController::getAccessToken());
+            $accessToken = stripslashes($bradesco->getAccessToken());
             $token =  json_decode($accessToken);
-            HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
+            $pocedures->updateToken($chavePix, $token->access_token, $token->expires_in);
             return $token->access_token;
-        } else {
-            return $token['p_token'];
-        };
+        }
+        return $token['p_token'];
     }
 
     public static function payload($dados, $resProcedure)
     {
+
+
         try {
+            $dados = json_decode($dados);
             $obPayload = (new Payload)->setMerchantName('Libercard')
                 ->setMerchantCity('Fortaleza')
                 ->setAmount($dados->valor->original)
@@ -82,10 +84,10 @@ class ApiPixController extends Controller
                 ->setUniquePayment(true);
 
             $payLoadQrCode = $obPayload->getPayload();
-            HelperProcedures::pr_cobranca_upd_emv($resProcedure['txId'], $payLoadQrCode);
+            HelperProcedures::pr_cobranca_upd_emv($resProcedure->txId, $payLoadQrCode);
             return response()->json(['data' => [
                 'emv' => $payLoadQrCode,
-                'menssage' => $resProcedure['dataResProcedure']
+                'menssage' => $resProcedure->dataResProcedure
             ]]);
         } catch (\Throwable $th) {
             dd($th);
@@ -97,7 +99,6 @@ class ApiPixController extends Controller
     public static function getCobByWebHook(Request $request)
     {
         $dados = $request->all();
-        Log::info($dados);
         foreach ($dados['pix'] as $pix) {
 
             $p_id_cobranca = $pix['txid'];
@@ -124,45 +125,7 @@ class ApiPixController extends Controller
 
     public static function putWebHookUrl($urlWebHook)
     {
-        return HelperBradescoController::putWebHookUrl($urlWebHook);
-    }
-
-
-    public function testeWebhook()
-    {
-        $urlbase = 'https://www5.libercard.com.br/api/get-cobranca-webhook/e570607e-3f4d-489a-bc0f-f885b4a59cc9';
-        $certificate = public_path('/files/certtest2.crt');
-        $certificateSslKey = public_path('/files/certtest2.key');
-        try {
-            //HEADERS
-            $headers = [
-                'Cache-Control: no-cache',
-                'Content-type: application/json',
-            ];
-
-
-            //CONFIGURAÇÃO DO CURL
-            $curl = curl_init();
-            curl_setopt_array($curl, array(
-                CURLOPT_URL =>  $urlbase,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_SSLCERT        => $certificate,
-                CURLOPT_SSLKEY         => $certificateSslKey,
-                CURLOPT_HTTPHEADER => $headers
-
-            ));
-
-            $response = curl_exec($curl);
-            return $response;
-            curl_close($curl);
-        } catch (\Exception $e) {
-            Log::info($e);
-        }
+        $bradesco = new HelperBradescoController();
+        return $bradesco->putWebHookUrl($urlWebHook);
     }
 }

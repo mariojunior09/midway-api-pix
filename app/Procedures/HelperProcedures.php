@@ -26,11 +26,11 @@ class HelperProcedures
         $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->execute();
-        $array = array(
+        $array = [
             "p_token" => $p_token,
             "id_retorno" => $id_retorno,
             "msg_retorno" => $msg_retorno
-        );
+        ];
         return $array;
     }
 
