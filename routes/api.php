@@ -21,7 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('pix-gerar-cobranca', 'ApiPixController@sendCobrancaPix');
-
 Route::put('cadastro-url-webhook', 'ApiPixController@putWebHookUrl');
 Route::post('get-cobranca-webhook', 'ApiPixController@getCobByWebHook');
 Route::get('pix-get-cobranca/{txid}', 'ApiPixController@getCobrancaBradescoByTxId');
