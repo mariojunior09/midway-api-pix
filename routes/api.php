@@ -25,5 +25,4 @@ Route::post('pix-gerar-cobranca', 'ApiPixController@sendCobrancaPix');
 Route::put('cadastro-url-webhook', 'ApiPixController@putWebHookUrl');
 Route::post('get-cobranca-webhook', 'ApiPixController@getCobByWebHook');
 Route::get('pix-get-cobranca/{txid}', 'ApiPixController@getCobrancaBradescoByTxId');
-
 Route::get('teste-webhook', 'ApiPixController@testeWebhook');
