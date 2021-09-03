@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 Route::post('pix-gerar-cobranca', 'ApiPixController@sendCobrancaPix');
 Route::put('cadastro-url-webhook', 'ApiPixController@putWebHookUrl');
 Route::post('get-cobranca-webhook', 'ApiPixController@getCobByWebHook');
