@@ -15,11 +15,9 @@ class HelperPix
     public static function verificaToken($chavePix)
     {
         $token = HelperProcedures::getToken($chavePix);
-
+       
         if ($token['id_retorno'] == Enums::ID_ERRO_PROCEDURE) {
-
-            if (VwBanco::getIdBanco($chavePix) == Enums::BANCO_DO_BRASIL) {
-
+            if (VwBanco::getIdBanco($chavePix)->id_banco == Enums::BANCO_DO_BRASIL) {
                 $token =  json_decode(HelperBancoDoBrasil::getAccessToken());
                 HelperProcedures::updateToken($chavePix, $token->access_token, $token->expires_in);
                 return $token->access_token;
