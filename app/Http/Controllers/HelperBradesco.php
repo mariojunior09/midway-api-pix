@@ -7,7 +7,7 @@ use App\Procedures\HelperProcedures;
 use Illuminate\Support\Facades\Log;
 
 
-class HelperBradescoController extends Controller
+class HelperBradesco extends Controller
 {
 
     public static function putWebHookUrl($urlWebHook)

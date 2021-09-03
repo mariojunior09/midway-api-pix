@@ -51,7 +51,7 @@ class HelperProcedures
             :p_msg_retorn); end;");
 
         $stmt->bindParam(':p_chave_pix', $p_chave_pix, \PDO::PARAM_STR, 500);
-        $stmt->bindParam(':p_token', $p_token, \PDO::PARAM_STR, 10000);
+        $stmt->bindParam(':p_token', $p_token, \PDO::PARAM_STR, 30000);
         $stmt->bindParam(':p_seg_expira', $p_seg_expira, \PDO::PARAM_STR, 500);
 
         $stmt->bindParam(':p_id_retorno', $id_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
@@ -232,5 +232,28 @@ class HelperProcedures
         $stmt->bindParam(':p_msg_retorn', $msg_retorno, $type = \PDO::PARAM_INPUT_OUTPUT, 500);
         $stmt->execute();
         return $msg_retorno;
+    }
+
+    public function pr_get_psp_cobranca($valor)
+    {
+        $chavePix = &$p_chave;
+        $id_retorno = &$p_id_retorno;
+        $msg_retorno = &$p_msg_retorno;
+
+        $db = DB::connection()->getPdo();
+        $stmt = $db->prepare("begin pk_pix.pr_get_psp_cobranca(
+            :p_valor,
+
+            :p_chave,
+            :p_id_retorno,
+            :p_msg_retorn
+            ); end;");
+        $stmt->bindParam(':p_valor', $valor, \PDO::PARAM_STR, 500);
+
+        $stmt->bindParam(':p_chave', $chavePix,  \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_id_retorno', $id_retorno,  \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->bindParam(':p_msg_retorn', $msg_retorno,  \PDO::PARAM_INPUT_OUTPUT, 500);
+        $stmt->execute();
+        return $chavePix;
     }
 }
