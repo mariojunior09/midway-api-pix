@@ -2,78 +2,55 @@
 
 namespace App\Http\Controllers;
 
+use App\enum\Enums;
+use App\Http\Controllers\banco\BancoBradescoControlle;
+use App\Http\Controllers\banco\BancoDoBrasilControlle;
 use App\pix\Payload;
-use App\PixModel;
 use App\Procedures\HelperProcedures;
+use App\VwBanco;
 use Illuminate\Http\Request;
 
 use function GuzzleHttp\json_decode;
 
 class ApiPixController extends Controller
 {
-    public  function criarCobrancaBradesco(Request $request)
+    private $procedures;
+    private $banco;
+    private $bradesco;
+    private $bancoBrasil;
+
+    function __construct()
     {
-        $pixModel  =  new PixModel();
-        $bradesco = new HelperBradescoController();
-
-        $chavePix = $pixModel->vw_chave_pix();
-        $expiracao = $pixModel->vw_config();
-        $dados = $request['data'];
-        $origemCobranca = $dados['origem_cobranca'];
-        $idCobOrigem = $dados['id_cob_origem'];
-
-        $dadosEnviados = [
-            'calendario' => [
-                'expiracao' => $expiracao->valor
-            ],
-            'devedor' => [
-                'cpf' => $dados['cpf'],
-                'nome' => $dados['nome']
-            ],
-            'valor' => [
-                'original' => $dados['valor']
-            ],
-            'chave' => $chavePix->chave_pix,
-            'solicitacaoPagador' => $dados['solicitacaoPagador']
-        ];
-
-        $token = self::verificaToken($chavePix->chave_pix);
-        $dadosEnviados = json_encode($dadosEnviados);
-        $cobranca = $bradesco->criarCobrancaBradesco(
-            $dadosEnviados,
-            $token,
-            $origemCobranca,
-            $idCobOrigem
-        );
-
-        return self::payload($cobranca->rescURL, $cobranca);
+        $this->procedures = new HelperProcedures;
+        $this->banco = new VwBanco;
+        $this->bradesco = new BancoBradescoControlle;
+        $this->bancoBrasil = new BancoDoBrasilControlle;
     }
 
-    public static function getCobrancaBradescoByTxId($txId)
+    public function sendCobrancaPix(Request $request)
     {
-        $bradesco = new HelperBradescoController();
-        return $bradesco->getCobrancaBradescoByTxId($txId);
-    }
+        try {
 
-    public static function verificaToken($chavePix)
-    {
-        $pocedures = new HelperProcedures();
-        $bradesco = new HelperBradescoController();
+            $dadosDaCobranca = current($request->all());
+            $dadosDaCobranca = (object) $dadosDaCobranca;
 
-        $token = $pocedures->getToken($chavePix);
-        if ($token['id_retorno'] == '99') {
-            $accessToken = stripslashes($bradesco->getAccessToken());
-            $token =  json_decode($accessToken);
-            $pocedures->updateToken($chavePix, $token->access_token, $token->expires_in);
-            return $token->access_token;
+            $chavePix = $this->procedures->pr_get_psp_cobranca($dadosDaCobranca->valor);
+            $idBanco = $this->banco->getIdBanco($chavePix);
+
+            if ($idBanco->id_banco == Enums::BANCO_DO_BRASIL) {
+                $cobrancaBancoBrasil = $this->bancoBrasil->gerarCobranca($dadosDaCobranca, $chavePix);
+                return self::payload($cobrancaBancoBrasil->rescURL,  $cobrancaBancoBrasil);
+            }
+
+            $cobrancaBradesco = $this->bradesco->gerarCobranca($dadosDaCobranca, $chavePix);
+            return self::payload($cobrancaBradesco->rescURL,  $cobrancaBradesco);
+        } catch (\Throwable $th) {
+            return response()->json(['data' => ['ERRO' => $th, 'mensagem' => 'ocorreu um erro na geração do qr code']]);
         }
-        return $token['p_token'];
     }
 
     public static function payload($dados, $resProcedure)
     {
-
-
         try {
             $dados = json_decode($dados);
             $obPayload = (new Payload)->setMerchantName('Libercard')
@@ -93,39 +70,5 @@ class ApiPixController extends Controller
             dd($th);
             return response()->json(['data' => ['emv' => $th, 'sucesso' => 'false', 'mensagem' => 'ocorreu um erro na geração do qr code']]);
         }
-    }
-
-
-    public static function getCobByWebHook(Request $request)
-    {
-        $dados = $request->all();
-        foreach ($dados['pix'] as $pix) {
-
-            $p_id_cobranca = $pix['txid'];
-            $p_id_status = '2';
-            $p_e2edid = $pix['endToEndId'];
-            $p_data_pagamento = date('d/m/Y H:i:s', strtotime($pix['horario']));
-            $p_pagador_cpf_cnpj = "";
-            $p_pagadpor_nome = "";
-            $p_info_pagador = "";
-            $p_valor = $pix['valor'];
-
-            HelperProcedures::pr_cobranca_atualiza_wh(
-                $p_id_cobranca,
-                $p_id_status,
-                $p_e2edid,
-                $p_data_pagamento,
-                $p_pagador_cpf_cnpj,
-                $p_pagadpor_nome,
-                $p_info_pagador,
-                $p_valor
-            );
-        }
-    }
-
-    public static function putWebHookUrl($urlWebHook)
-    {
-        $bradesco = new HelperBradescoController();
-        return $bradesco->putWebHookUrl($urlWebHook);
     }
 }
